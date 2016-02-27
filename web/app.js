@@ -21,7 +21,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(user);
+app.use("/user",user);
 //Database connection
 var dbUrl = 'mongodb://localhost:27017/web';
 mongoose.connect(dbUrl, function(err){
