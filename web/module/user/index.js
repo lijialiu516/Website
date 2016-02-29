@@ -4,20 +4,22 @@ var User = require('./user.js');
 
 app.post('/register', function(req, res) {
     var user = new User(req.body);
-    user.save(function(err, post){
-        if (err) { return next(err);}
+    console.log('Receive register request');
+    user.save(function(err, user){
+        if (err) {res.send(err.message)}
+        else res.send('register success');        
     });
-    res.send('register');        
 });
 
 app.get('/signin', function(req, res) {
-    var user = User.find({email : req.body.email}, function(err, user) {
-        if (err) { return next(err);}
-        res.send(user);
+    User.findOne({email : req.body.email}, function(err, user) {
+        if (err) { return res.send(err.message);}
+        user.isPasswordCorrect(req.body.password, function(err, isMatch) {
+            if (err) {
+                console.log(err);
+                return res.send(err);
+            }
+            res.send(isMatch);
+        });
     }); 
-    res.send('signin');
-});
-
-app.get('/list', function(req, res){
-    res.send('list');
 });
